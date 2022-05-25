@@ -31,7 +31,7 @@ const List = () => {
         key: newItems.length,
         name: name,
         category: "TODO",
-        order: order,
+        order: order
       };
       newItems.unshift(newItem);
       return newItems;
@@ -51,6 +51,15 @@ const List = () => {
     });
   };
 
+  const itemDeleted = (id: number) => {
+    setItemsState((prevItems) => {
+      let newItems = [...prevItems];
+      let index = newItems.findIndex((item) => item.key === id);
+      newItems.splice(index, 1);
+      return newItems;
+    });
+  };
+
   return (
     <>
       <ItemForm onSubmitHandler={addItem}></ItemForm>
@@ -64,6 +73,7 @@ const List = () => {
               category={item.category}
               order={item.order}
               onChange={itemChanged}
+              onDelete={itemDeleted}
             ></Item>
           );
         })}

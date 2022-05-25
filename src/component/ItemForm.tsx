@@ -24,6 +24,7 @@ const ItemForm = (props: {
   return (
     <form onSubmit={submitHandler}>
       <label htmlFor="name">
+        Name&nbsp;
         <input
           id="name"
           type="text"
@@ -32,6 +33,7 @@ const ItemForm = (props: {
         />
       </label>
       <label htmlFor="order">
+        Order&nbsp;
         <input
           id="order"
           name="order"
@@ -41,7 +43,7 @@ const ItemForm = (props: {
           onChange={orderChangeHandler}
         />
       </label>
-      <input type="submit" />
+      <input type="submit" value="add" />
     </form>
   );
 };
