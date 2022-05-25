@@ -2,6 +2,10 @@
     display: table-row;
 }
 
+.item:hover {
+    background: lightgray;
+}
+
 label, input, span {
     display: table-cell;
     padding-left: 5px;

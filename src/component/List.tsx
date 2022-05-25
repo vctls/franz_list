@@ -61,7 +61,7 @@ const List = () => {
   };
 
   return (
-    <>
+    <main>
       <ItemForm onSubmitHandler={addItem}></ItemForm>
       <ol id="list">
         {itemsState.map((item) => {
@@ -78,7 +78,7 @@ const List = () => {
           );
         })}
       </ol>
-    </>
+    </main>
   );
 };
 

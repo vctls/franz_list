@@ -1,6 +1,11 @@
+main {
+    max-width: 500px;
+    margin: 10px auto;
+}
+
 #list {
     display: table;
-    margin: auto;
     padding: 0;
-    margin-top: 10px;
+    margin: 10px auto auto;
+    width: 100%;
 }
