@@ -11,28 +11,58 @@ const Item = (props: {
   category: string;
   onDelete(id: number): void;
 }) => {
-  const [state, setState] = useState(false);
+  const [done, setDone] = useState(false);
   const changeHandler = (): void => {
-    setState(!state);
-    props.onChange(props.id, !state);
+    setDone(!done);
+    props.onChange(props.id, !done);
   };
 
+  const [deleted, setDeleted] = useState(false);
+  let el: EventTarget | null;
   const swipeHandler = useSwipeable({
-    onSwipedLeft: () => {
-      props.onDelete(props.id);
+    onTouchStartOrOnMouseDown: (e) => {
+      if (e.event.target instanceof HTMLElement) {
+        el = e.event.target.closest("li");
+      }
+    },
+    onSwiping: (eventData) => {
+      if (el instanceof HTMLElement) {
+        const deltaX = eventData.deltaX;
+        let translate = Math.abs(deltaX) < 100 ? Math.abs(deltaX) : 100;
+        if (deltaX < -10) {
+          el.style.transform = `translateX(-${translate}px)`;
+        } else if (deltaX > 10) {
+          el.style.transform = `translateX(${translate}px)`;
+        } else {
+          el.style.transform = "translateX(0)";
+        }
+      }
+    },
+    onTouchEndOrOnMouseUp: () => {
+      if (el instanceof HTMLElement) {
+        el.style.transform = "";
+      }
+    },
+    onSwipedLeft: (eventData) => {
+      if (eventData.deltaX < -50) {
+        setDeleted(true);
+        props.onDelete(props.id);
+      }
     }, trackMouse: true
   });
 
+  const className = "item" + (done ? " done" : "") + (deleted ? " deleted" : "");
+
   return (
-    <li className={"item" + (state ? " done" : "")} {...swipeHandler} style={{ touchAction: "pan-left" }}>
+    <li id={"item_" + props.id} className={className} {...swipeHandler} style={{ touchAction: "pan-y" }}>
       <input
-        id={"item_" + props.id}
+        id={"input_" + props.id}
         type="checkbox"
-        checked={state}
+        checked={done}
         onChange={changeHandler}
       />
       <span className="order">{props.order}</span>
-      <label htmlFor={"item_" + props.id}>
+      <label htmlFor={"input_" + props.id}>
         <span>{props.name}</span>
       </label>
     </li>

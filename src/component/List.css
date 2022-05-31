@@ -4,7 +4,8 @@ main {
 }
 
 #list {
-    display: table;
+    display: flex;
+    flex-direction: column;
     padding: 0;
     margin: 10px auto auto;
     width: 100%;

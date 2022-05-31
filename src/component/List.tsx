@@ -55,7 +55,10 @@ const List = () => {
     setItemsState((prevItems) => {
       let newItems = [...prevItems];
       let index = newItems.findIndex((item) => item.key === id);
-      newItems.splice(index, 1);
+      // TODO Only mark item for deletion. Do not remove it from the array,
+      //  so it can be manipulated further, or re-added to the list.
+      //newItems.splice(index, 1);
+      console.log(index);
       return newItems;
     });
   };
