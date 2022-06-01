@@ -1,4 +1,10 @@
 form {
     margin: 0 auto;
     width: fit-content;
+    font-size: large;
 }
+
+form :not(input:last-child) {
+    margin-right: 5px;
+}
+
