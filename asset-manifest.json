@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/franz_list/static/css/main.fbed7ee5.css",
+    "main.js": "/franz_list/static/js/main.a30fa216.js",
+    "static/js/787.14ded7f3.chunk.js": "/franz_list/static/js/787.14ded7f3.chunk.js",
+    "index.html": "/franz_list/index.html",
+    "main.fbed7ee5.css.map": "/franz_list/static/css/main.fbed7ee5.css.map",
+    "main.a30fa216.js.map": "/franz_list/static/js/main.a30fa216.js.map",
+    "787.14ded7f3.chunk.js.map": "/franz_list/static/js/787.14ded7f3.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.fbed7ee5.css",
+    "static/js/main.a30fa216.js"
+  ]
+}
