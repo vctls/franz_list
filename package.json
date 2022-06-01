@@ -1,5 +1,6 @@
 {
   "name": "franz_list",
+  "homepage": "https://vctls.github.io/franz_list/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",
@@ -17,13 +18,16 @@
   },
   "devDependencies": {
     "eslint-config-prettier": "^8.5.0",
+    "gh-pages": "^4.0.0",
     "prettier": "2.6.2"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
