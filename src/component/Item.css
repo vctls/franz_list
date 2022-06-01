@@ -1,26 +1,63 @@
 .item {
     overflow: hidden;
     height: 30px;
-    transition: height 0.3s ease-in-out;
+    transition: height .3s ease-in-out;
+    position: relative; /*Necessary to keed visual divs behind.*/
 }
 
-.item:hover {
+.item-content:hover {
     background: lightgray;
 }
 
-label, span {
+.item-content {
+    background-color: white;
+    z-index: 2;
+    height: inherit;
+    position: relative;
+    right: 0;
+    transition: right .3s ease-in-out;
+}
+
+.item.deleted .item-content {
+    right: 500px;
+}
+
+span {
     user-select: none;
 }
 
-label, input, span {
-    padding-left: 5px;
+.order {
+    display: inline-block;
+    width: 10%;
 }
 
-.done {
+.name {
+    display: inline-block;
+    width: 90%;
+}
+
+.done .field {
     text-decoration: line-through;
     color: gray;
 }
 
 .item.deleted {
     height: 0;
+}
+
+
+.trash {
+    background-color: orangered;
+    width: 50%;
+    height: inherit;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1;
+    text-align: right;
+}
+
+.cross {
+    vertical-align: middle;
+    padding-right: 5px;
 }

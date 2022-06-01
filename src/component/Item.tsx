@@ -12,17 +12,17 @@ const Item = (props: {
   onDelete(id: number): void;
 }) => {
   const [done, setDone] = useState(false);
-  const changeHandler = (): void => {
-    setDone(!done);
-    props.onChange(props.id, !done);
-  };
 
   const [deleted, setDeleted] = useState(false);
   let el: EventTarget | null;
   const swipeHandler = useSwipeable({
+    onTap: () => {
+      setDone(!done);
+      props.onChange(props.id, !done);
+    },
     onTouchStartOrOnMouseDown: (e) => {
       if (e.event.target instanceof HTMLElement) {
-        el = e.event.target.closest("li");
+        el = e.event.target.closest(".item-content");
       }
     },
     onSwiping: (eventData) => {
@@ -38,15 +38,22 @@ const Item = (props: {
         }
       }
     },
-    onTouchEndOrOnMouseUp: () => {
+    onSwipedLeft: (eventData) => {
       if (el instanceof HTMLElement) {
+        if (eventData.deltaX < -50) {
+          setDeleted(true);
+          props.onDelete(props.id);
+          return;
+        }
         el.style.transform = "";
       }
     },
-    onSwipedLeft: (eventData) => {
-      if (eventData.deltaX < -50) {
-        setDeleted(true);
-        props.onDelete(props.id);
+    onSwipedRight: (eventData) => {
+      if (el instanceof HTMLElement) {
+        if (eventData.deltaX > 50) {
+          // TODO Edit item.
+        }
+        el.style.transform = "";
       }
     }, trackMouse: true
   });
@@ -54,17 +61,16 @@ const Item = (props: {
   const className = "item" + (done ? " done" : "") + (deleted ? " deleted" : "");
 
   return (
-    <li id={"item_" + props.id} className={className} {...swipeHandler} style={{ touchAction: "pan-y" }}>
-      <input
-        id={"input_" + props.id}
-        type="checkbox"
-        checked={done}
-        onChange={changeHandler}
-      />
-      <span className="order">{props.order}</span>
-      <label htmlFor={"input_" + props.id}>
-        <span>{props.name}</span>
-      </label>
+    <li id={"item_" + props.id} className={className}>
+      <div className="item-content" {...swipeHandler} style={{ touchAction: "pan-y" }}>
+        <span className="field order">{props.order}</span>
+        <span className="field name" onClick={(e) => e.preventDefault()}>
+          {props.name}
+        </span>
+      </div>
+      <div className="trash">
+        <span className="cross">❌</span>
+      </div>
     </li>
   );
 };
