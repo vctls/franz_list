@@ -3,7 +3,6 @@ import { useState } from "react";
 import "./Item.css";
 import { useSwipeable } from "react-swipeable";
 
-// Keep track of the type of event to prevent double taps with mixed events.
 let eventType: string = "";
 
 const Item = (props: {
@@ -22,17 +21,28 @@ const Item = (props: {
 
   const swipeHandler = useSwipeable({
     onTap: (e) => {
+
+      // Only register left click.
+      if (e.event instanceof MouseEvent) {
+        if (e.event.button !== 0) {
+          return;
+        }
+      }
+
+      // Keep track of the type of event to prevent double taps with mixed events.
       if (eventType === "" || e.event.type === eventType) {
         eventType = e.event.type;
         setDone(!done);
         props.onChange(props.id, !done);
       }
     },
+
     onTouchStartOrOnMouseDown: (e) => {
       if (e.event.target instanceof HTMLElement) {
         el = e.event.target.closest(".item-content");
       }
     },
+
     onSwiping: (eventData) => {
       if (el instanceof HTMLElement) {
         const deltaX = eventData.deltaX;
@@ -57,7 +67,7 @@ const Item = (props: {
       // Check that an action was taken before resetting transform.
       // Problem: the action is probably not applied at this point.
       // Instead, check if the element has moved beyond action treshold.
-
+      // This seems to be more reliable than "swiped" events.
       if (el instanceof HTMLElement) {
         const shouldDelete = el.dataset.shouldDelete;
         if (shouldDelete === "true") {
@@ -68,6 +78,7 @@ const Item = (props: {
         el.style.transform = "";
       }
     },
+    
     trackMouse: true
   });
 
@@ -75,7 +86,7 @@ const Item = (props: {
 
   return (
     <li id={"item_" + props.id} className={className}>
-      <div className="item-content" {...swipeHandler} style={{ touchAction: "pan-y" }}>
+      <div tabIndex={0} role="button" className="item-content" {...swipeHandler} style={{ touchAction: "pan-y" }}>
         <span className="field order">{props.order}</span>
         <span className="field name" onClick={(e) => e.preventDefault()}>
           {props.name}
