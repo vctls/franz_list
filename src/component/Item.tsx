@@ -3,6 +3,9 @@ import { useState } from "react";
 import "./Item.css";
 import { useSwipeable } from "react-swipeable";
 
+// Keep track of the type of event to prevent double taps with mixed events.
+let eventType: string = "";
+
 const Item = (props: {
   onChange: (id: number, arg1: boolean) => void;
   id: number;
@@ -15,10 +18,15 @@ const Item = (props: {
 
   const [deleted, setDeleted] = useState(false);
   let el: EventTarget | null;
+  const deleteTreshold = -50;
+
   const swipeHandler = useSwipeable({
-    onTap: () => {
-      setDone(!done);
-      props.onChange(props.id, !done);
+    onTap: (e) => {
+      if (eventType === "" || e.event.type === eventType) {
+        eventType = e.event.type;
+        setDone(!done);
+        props.onChange(props.id, !done);
+      }
     },
     onTouchStartOrOnMouseDown: (e) => {
       if (e.event.target instanceof HTMLElement) {
@@ -29,6 +37,7 @@ const Item = (props: {
       if (el instanceof HTMLElement) {
         const deltaX = eventData.deltaX;
         let translate = Math.abs(deltaX) < 100 ? Math.abs(deltaX) : 100;
+        el.dataset.shouldDelete = "false";
         if (deltaX < -10) {
           el.style.transform = `translateX(-${translate}px)`;
         } else if (deltaX > 10) {
@@ -36,26 +45,30 @@ const Item = (props: {
         } else {
           el.style.transform = "translateX(0)";
         }
+        if (deltaX < deleteTreshold) {
+          el.dataset.shouldDelete = "true";
+        }
       }
     },
-    onSwipedLeft: (eventData) => {
+
+    onTouchEndOrOnMouseUp: () => {
+      // When the swipe doesn't end on the original element
+      // and there is no subsequent action, transform is not reset.
+      // Check that an action was taken before resetting transform.
+      // Problem: the action is probably not applied at this point.
+      // Instead, check if the element has moved beyond action treshold.
+
       if (el instanceof HTMLElement) {
-        if (eventData.deltaX < -50) {
-          setDeleted(true);
+        const shouldDelete = el.dataset.shouldDelete;
+        if (shouldDelete === "true") {
           props.onDelete(props.id);
+          setDeleted(true);
           return;
         }
         el.style.transform = "";
       }
     },
-    onSwipedRight: (eventData) => {
-      if (el instanceof HTMLElement) {
-        if (eventData.deltaX > 50) {
-          // TODO Edit item.
-        }
-        el.style.transform = "";
-      }
-    }, trackMouse: true
+    trackMouse: true
   });
 
   const className = "item" + (done ? " done" : "") + (deleted ? " deleted" : "");
