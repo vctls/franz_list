@@ -25,6 +25,10 @@
     right: 500px;
 }
 
+.item.editing .item-content {
+    right: -500px;
+}
+
 span {
     user-select: none;
     vertical-align: middle;
@@ -45,10 +49,12 @@ span {
     color: gray;
 }
 
-.item.deleted {
+.item.deleted, .item.editing {
     height: 0;
 }
 
+/* Informational icons about actions. */
+/*TODO Use element width rather than superposition.*/
 
 .trash {
     background-color: orangered;
@@ -59,9 +65,27 @@ span {
     right: 0;
     z-index: 1;
     text-align: right;
+    vertical-align: middle;
+}
+
+.edit {
+    background-color: limegreen;
+    width: 50%;
+    height: inherit;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    text-align: left;
+    vertical-align: middle;
 }
 
 .cross {
     vertical-align: middle;
     padding-right: 5px;
+}
+
+.memo {
+    vertical-align: middle;
+    padding-left: 5px;
 }
