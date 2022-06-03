@@ -77,9 +77,7 @@ const List = () => {
   };
 
   const toggleDone = (id: number): void => {
-    console.log("toggleDone");
     setItemsState((prevItems) => {
-      console.log("setItemsState")
       let newItems = [...prevItems];
       let index = newItems.findIndex((item) => item.key === id);
       // We have to copy the object, or it messes up with React "deep comparison"
