@@ -15,10 +15,17 @@ const Item = (props: {
   name: string;
   category: string;
   onDelete(id: number): void;
+  onEdit(id: number): void;
 }) => {
   const [deleted, setDeleted] = useState(false);
+  const [editing, setEditing] = useState(false);
+
+  // Keep the target element at a higher scope than the handlers
+  // since actions need information from multiple handlers to work correctly.
   let el: EventTarget | null;
-  const deleteTreshold = -50;
+
+  // Number of pixels beyond which the translation triggers an event.
+  const actionTreshold = 50;
 
   const swipeHandler = useSwipeable({
     onTap: (e) => {
@@ -46,7 +53,12 @@ const Item = (props: {
       if (el instanceof HTMLElement) {
         const deltaX = eventData.deltaX;
         let translate = Math.abs(deltaX) < 100 ? Math.abs(deltaX) : 100;
+
+        // Information about actions is stored in the item for further
+        // action in the final handler.
         el.dataset.shouldDelete = "false";
+        el.dataset.shouldEdit = "false";
+
         if (deltaX < -10) {
           el.style.transform = `translateX(-${translate}px)`;
         } else if (deltaX > 10) {
@@ -54,8 +66,11 @@ const Item = (props: {
         } else {
           el.style.transform = "translateX(0)";
         }
-        if (deltaX < deleteTreshold) {
+        if (deltaX < -actionTreshold) {
           el.dataset.shouldDelete = "true";
+        }
+        if (deltaX > actionTreshold) {
+          el.dataset.shouldEdit = "true";
         }
       }
     },
@@ -68,20 +83,28 @@ const Item = (props: {
       // Instead, check if the element has moved beyond action treshold.
       // This seems to be more reliable than "swiped" events.
       if (el instanceof HTMLElement) {
-        const shouldDelete = el.dataset.shouldDelete;
-        if (shouldDelete === "true") {
+        if (el.dataset.shouldDelete === "true") {
           props.onDelete(props.id);
           setDeleted(true);
+          return;
+        }
+        if (el.dataset.shouldEdit === "true") {
+          // Send edition command then delete the item.
+          // No need for a fancier etdition method for the moment.
+          props.onEdit(props.id);
+          props.onDelete(props.id);
+          setEditing(true);
           return;
         }
         el.style.transform = "";
       }
     },
-
-    trackMouse: true,
+    trackMouse: true
   });
 
-  let className = "item" + (props.done ? " done" : "") + (deleted ? " deleted" : "");
+  const className = "item" + (props.done ? " done" : "")
+    + (deleted ? " deleted" : "")
+    + (editing ? " editing" : "");
 
   return (
     <li
@@ -105,6 +128,9 @@ const Item = (props: {
       </div>
       <div className="trash">
         <span className="cross">❌</span>
+      </div>
+      <div className="edit">
+        <span className="memo">📝</span>
       </div>
     </li>
   );

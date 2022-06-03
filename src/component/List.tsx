@@ -106,6 +106,10 @@ const List = () => {
       return newItems;
     });
   };
+  
+  const itemEdit = (id: number) => {
+    // TODO Set form fields to item values.
+  }
 
   return (
     <main>
@@ -126,6 +130,7 @@ const List = () => {
               onMouseEnter={() => {
                 setCurrentItem(index);
               }}
+              onEdit={itemEdit}
             ></Item>
           );
         })}
