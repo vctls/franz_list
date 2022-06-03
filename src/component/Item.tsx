@@ -6,22 +6,22 @@ import { useSwipeable } from "react-swipeable";
 let eventType: string = "";
 
 const Item = (props: {
-  onChange: (id: number, arg1: boolean) => void;
+  toggleDone: (id: number) => void;
+  onMouseEnter: () => void;
   id: number;
+  done: boolean;
+  highlighted: boolean;
   order: number;
   name: string;
   category: string;
   onDelete(id: number): void;
 }) => {
-  const [done, setDone] = useState(false);
-
   const [deleted, setDeleted] = useState(false);
   let el: EventTarget | null;
   const deleteTreshold = -50;
 
   const swipeHandler = useSwipeable({
     onTap: (e) => {
-
       // Only register left click.
       if (e.event instanceof MouseEvent) {
         if (e.event.button !== 0) {
@@ -32,8 +32,7 @@ const Item = (props: {
       // Keep track of the type of event to prevent double taps with mixed events.
       if (eventType === "" || e.event.type === eventType) {
         eventType = e.event.type;
-        setDone(!done);
-        props.onChange(props.id, !done);
+        props.toggleDone(props.id);
       }
     },
 
@@ -78,15 +77,27 @@ const Item = (props: {
         el.style.transform = "";
       }
     },
-    
-    trackMouse: true
+
+    trackMouse: true,
   });
 
-  const className = "item" + (done ? " done" : "") + (deleted ? " deleted" : "");
+  let className = "item" + (props.done ? " done" : "") + (deleted ? " deleted" : "");
 
   return (
-    <li id={"item_" + props.id} className={className}>
-      <div tabIndex={0} role="button" className="item-content" {...swipeHandler} style={{ touchAction: "pan-y" }}>
+    <li
+      id={"item_" + props.id}
+      className={className}
+      onMouseEnter={props.onMouseEnter}
+    >
+      <div
+        tabIndex={0}
+        role="button"
+        className={`item-content ${
+          props.highlighted ? "item-highlighted" : ""
+        }`}
+        {...swipeHandler}
+        style={{ touchAction: "pan-y" }}
+      >
         <span className="field order">{props.order}</span>
         <span className="field name" onClick={(e) => e.preventDefault()}>
           {props.name}
