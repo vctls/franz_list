@@ -5,7 +5,7 @@
     position: relative; /*Necessary to keed visual divs behind.*/
 }
 
-.item-content:hover {
+.item-content:focus {
     background: lightgray;
 }
 
@@ -20,11 +20,6 @@
     transition: right .3s ease-in-out;
 }
 
-.item-content:focus {
-    border: thin solid black;
-    box-sizing: border-box;
-}
-
 .item.deleted .item-content {
     right: 500px;
 }
@@ -36,6 +31,7 @@
 span {
     user-select: none;
     vertical-align: middle;
+    pointer-events: none;
 }
 
 .order {

@@ -1,5 +1,6 @@
-import * as React from "react";
-import { useState } from "react";
+import React, { KeyboardEvent, useState } from "react";
+// For some reason, importing MouseEvent as a component results in runtime
+// errors on clicks. Using React.MouseEvent solves it.
 import "./Item.css";
 import { useSwipeable } from "react-swipeable";
 
@@ -14,7 +15,6 @@ const Item = (props: {
   onDelete(id: number): void;
   onEdit(id: number): void;
 }) => {
-
   const [done, setDone] = useState(false);
   const [deleted, setDeleted] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -28,7 +28,6 @@ const Item = (props: {
 
   const swipeHandler = useSwipeable({
     onTap: (e) => {
-
       // Only register left click.
       if (e.event instanceof MouseEvent) {
         if (e.event.button !== 0) {
@@ -101,20 +100,63 @@ const Item = (props: {
       }
     },
 
-    trackMouse: true
+    trackMouse: true,
   });
 
-  const className = "item" + (done ? " done" : "")
-    + (deleted ? " deleted" : "")
-    + (editing ? " editing" : "");
+  const className =
+    "item" +
+    (done ? " done" : "") +
+    (deleted ? " deleted" : "") +
+    (editing ? " editing" : "");
+
+  const onDivMouseOverCapture = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const target = event.currentTarget;
+    target.focus();
+  };
+
+  const onDivKeyUpCapture = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.code === "ArrowDown") {
+      const nextSibling = e.currentTarget.closest("li")?.nextSibling;
+      if (nextSibling instanceof HTMLElement) {
+        const nextDiv = nextSibling.querySelector(".item-content");
+        if (nextDiv instanceof HTMLDivElement) {
+          nextDiv.focus();
+          return;
+        }
+      }
+    }
+    if (e.code === "ArrowUp") {
+      const previousSibling = e.currentTarget.closest("li")?.previousSibling;
+      if (previousSibling instanceof HTMLElement) {
+        const prevDiv = previousSibling.querySelector(".item-content");
+        if (prevDiv instanceof HTMLDivElement) {
+          prevDiv.focus();
+          return;
+        }
+      }
+    }
+    if (e.code === "Space") {
+      setDone(!done);
+      props.onChange(props.id, !done);
+    }
+  };
 
   return (
     <li id={"item_" + props.id} className={className}>
-      <div tabIndex={0} role="button" className="item-content" {...swipeHandler} style={{ touchAction: "pan-y" }}>
+      <div
+        tabIndex={0}
+        id={"item-content_" + props.id}
+        role="button"
+        onMouseOverCapture={onDivMouseOverCapture}
+        onKeyUp={onDivKeyUpCapture}
+        className="item-content"
+        {...swipeHandler}
+        style={{ touchAction: "pan-y" }}
+      >
         <span className="field order">{props.order}</span>
-        <span className="field name" onClick={(e) => e.preventDefault()}>
-          {props.name}
-        </span>
+        <span className="field name">{props.name}</span>
       </div>
       <div className="trash">
         <span className="cross">❌</span>
