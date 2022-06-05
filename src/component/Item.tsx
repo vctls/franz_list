@@ -100,6 +100,8 @@ function focus(e: React.KeyboardEvent<HTMLDivElement>, offset: number) {
 const keyUpHandler =
   (
     setDone: (value: ((prevState: boolean) => boolean) | boolean) => void,
+    setDeleted: (value: ((prevState: boolean) => boolean) | boolean) => void,
+    setEditing: (value: ((prevState: boolean) => boolean) | boolean) => void,
     done: boolean,
     props: {
       onChange: (id: number, arg1: boolean) => void;
@@ -125,6 +127,14 @@ const keyUpHandler =
       case "Space":
         setDone(!done);
         props.onChange(props.id, !done);
+        break;
+      case "ArrowLeft":
+        setDeleted(true);
+        props.onDelete(props.id)
+        break;
+      case "ArrowRight":
+        setEditing(true);
+        props.onEdit(props.id);
         break;
     }
   };
@@ -212,7 +222,7 @@ const Item = (props: {
         id={"item-content_" + props.id}
         role="button"
         onMouseOverCapture={onDivMouseOverCapture}
-        onKeyUp={keyUpHandler(setDone, done, props)}
+        onKeyUp={keyUpHandler(setDone, setDeleted, setEditing, done, props)}
         className="item-content"
         {...swipeHandler}
         style={{ touchAction: "pan-y" }}
