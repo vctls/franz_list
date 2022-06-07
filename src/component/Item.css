@@ -9,6 +9,13 @@
     background: lightgray;
 }
 
+/*
+The trailing animation uses the `right` property,
+whereas the manual drag uses the `translate` effect.
+That way the animation curve is only applied to the
+trailing transition and leaves the manual interaction
+untouched.
+ */
 .item-content {
     display: block;
     color: black;
@@ -53,31 +60,56 @@ span {
     height: 0;
 }
 
-/* Informational icons about actions. */
-/*TODO Use element width rather than superposition.*/
+/* 
+Informational icons about actions.
+
+Left and right visual hints use 50% of the div by default.
+When the content slides beyond the action treshold,
+the opposite visual hint is hidden in order to make the
+trailing transition cleaner.
+*/
+
+.visual {
+    width: 50%;
+    overflow: hidden;
+    height: inherit;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    pointer-events: none;
+    transition: width .3s ease-in-out;
+}
 
 .trash {
     background-color: orangered;
-    width: 50%;
-    height: inherit;
-    position: absolute;
-    top: 0;
     right: 0;
-    z-index: 1;
     text-align: right;
-    vertical-align: middle;
+}
+
+.item-content[data-should-delete="true"] ~ .edit {
+    display: none;
+}
+
+.item-content[data-should-delete="true"] ~ .trash {
+    width: 100%;
 }
 
 .edit {
     background-color: limegreen;
-    width: 50%;
-    height: inherit;
-    position: absolute;
-    top: 0;
     left: 0;
-    z-index: 1;
     text-align: left;
-    vertical-align: middle;
+}
+
+.item-content[data-should-edit="true"] ~ .trash {
+    display: none;
+}
+
+.item-content[data-should-edit="true"] ~ .edit {
+    width: 100%;
+}
+
+.icon {
+    display: inline-block;
 }
 
 .cross {

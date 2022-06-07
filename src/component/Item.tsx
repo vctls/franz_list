@@ -72,11 +72,11 @@ const Item = (props: {
         <span className="field order">{props.order}</span>
         <span className="field name">{props.name}</span>
       </div>
-      <div className="trash">
-        <span className="cross">❌</span>
+      <div className="visual edit">
+        <span className="icon memo">📝</span>
       </div>
-      <div className="edit">
-        <span className="memo">📝</span>
+      <div className="visual trash">
+        <span className="icon cross">❌</span>
       </div>
     </li>
   );
