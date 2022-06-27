@@ -34,7 +34,10 @@ const List = () => {
 
   const submitHandler = (e: FormEvent): void => {
     e.preventDefault();
-    addItem(nameState, orderState);
+    // Prevent exact duplicates
+    if (!itemsState.find((item) => item.name === nameState)) {
+      addItem(nameState, orderState);
+    }
   };
 
   const nameChangeHandler = (e: React.FormEvent<HTMLInputElement>): void => {
