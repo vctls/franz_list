@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
 import List from "./component/List";
+import "@fontsource/water-brush"
 
 function App() {
 
