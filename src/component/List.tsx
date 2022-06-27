@@ -27,7 +27,8 @@ const getInitialArray = () => {
 
 const List = () => {
   const [itemsState, setItemsState] = useState(getInitialArray());
-
+  
+  // Delegated form state
   const [nameState, setNameState] = useState("");
   const [orderState, setOrderState] = useState(0);
 
@@ -39,21 +40,20 @@ const List = () => {
   const nameChangeHandler = (e: React.FormEvent<HTMLInputElement>): void => {
     setNameState(e.currentTarget.value);
   };
-
+  
   const orderChangeHandler = (e: React.FormEvent<HTMLInputElement>): void => {
     setOrderState(parseInt(e.currentTarget.value));
   };
 
   const addItem = (name: string, order: number): void => {
     setItemsState((prevItems) => {
-      let newItems = [...prevItems];
-      let newItem = {
+      const newItems = [...prevItems];
+      newItems.unshift({
         key: newItems.length,
         name: name,
         category: "TODO",
         order: order,
-      };
-      newItems.unshift(newItem);
+      });
       return newItems;
     });
   };
@@ -97,7 +97,10 @@ const List = () => {
     });
     document.getElementById("name")?.focus();
   };
-
+  
+  // Filter items that contain the string in the name field.
+  const filteredItems = itemsState.filter((item) => item.name.includes(nameState))
+  
   return (
     <main>
       <ItemForm
@@ -108,7 +111,7 @@ const List = () => {
         submitHandler={submitHandler}
       ></ItemForm>
       <ol id="list">
-        {itemsState.map((item) => {
+        {filteredItems.map((item) => {
           return (
             <Item
               key={item.key}
