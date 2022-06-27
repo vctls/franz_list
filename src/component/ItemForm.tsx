@@ -7,9 +7,11 @@ const ItemForm = (props: {
   nameChangeHandler: (e: React.FormEvent<HTMLInputElement>) => void;
   orderChangeHandler: (e: React.FormEvent<HTMLInputElement>) => void;
   submitHandler: (e: React.FormEvent) => void;
+  clearHandler: (e: React.FormEvent<HTMLInputElement>) => void;
 }) => {
   return (
     <form onSubmit={props.submitHandler}>
+      <input type="button" value="clear" onClick={props.clearHandler} />
       <label htmlFor="name">
         Name&nbsp;
         <input

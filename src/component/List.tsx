@@ -103,7 +103,12 @@ const List = () => {
   
   // Filter items that contain the string in the name field.
   const filteredItems = itemsState.filter((item) => item.name.includes(nameState))
-  
+
+  const clearHandler = () => {
+    setNameState("");
+    setOrderState(0);
+  };
+
   return (
     <main>
       <ItemForm
@@ -112,6 +117,7 @@ const List = () => {
         nameChangeHandler={nameChangeHandler}
         orderChangeHandler={orderChangeHandler}
         submitHandler={submitHandler}
+        clearHandler={clearHandler}
       ></ItemForm>
       <ol id="list">
         {filteredItems.map((item) => {
