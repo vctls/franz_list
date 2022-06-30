@@ -53,7 +53,6 @@ class GestureHandler {
         id: number;
         order: number;
         name: string;
-        category: string;
         onDelete(id: number): void;
         onEdit(id: number): void;
       },
@@ -114,7 +113,6 @@ class GestureHandler {
         id: number;
         order: number;
         name: string;
-        category: string;
         onDelete(id: number): void;
         onEdit(id: number): void;
       }
@@ -160,7 +158,6 @@ class GestureHandler {
         id: number;
         order: number;
         name: string;
-        category: string;
         onDelete(id: number): void;
         onEdit(id: number): void;
       }

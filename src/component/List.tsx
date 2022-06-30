@@ -15,15 +15,24 @@ const getInitialArray = () => {
   let key: number,
     deleted = false,
     name: string,
-    category: string,
     order: number;
 
   for (let i: number = 0; i < 10; i++) {
     key = i;
     order = i;
-    name = (Math.random() + 1).toString(36).substring(7);
-    category = (Math.random() + 1).toString(36).substring(7);
-    itemArray.push({ key, name, category, order, deleted });
+    name = [
+      "Don Sanche",
+      "Christus",
+      "Te Deum",
+      "An die Künstler",
+      "La terre",
+      "Les aquilons",
+      "Les flots",
+      "Les astres",
+      "Nicht gezagt",
+      "Saatengrün",
+    ][i];
+    itemArray.push({ key, name, order, deleted });
   }
 
   return itemArray;
@@ -38,12 +47,12 @@ const List = () => {
 
   const submitHandler = (e: FormEvent): void => {
     e.preventDefault();
-    
+
     // Prevent adding item with empty name.
     if (nameState === "") {
       return;
     }
-    
+
     // Prevent exact duplicates.
     const found = itemsState.find(
       (item) => item.name === nameState && item.deleted === false
@@ -72,9 +81,8 @@ const List = () => {
       newItems.unshift({
         key: newItems.length,
         name: name,
-        category: "TODO",
         order: order,
-        deleted: false
+        deleted: false,
       });
       return newItems;
     });
@@ -149,7 +157,6 @@ const List = () => {
               key={item.key}
               id={item.key}
               name={item.name}
-              category={item.category}
               order={item.order}
               onChange={itemChanged}
               onDelete={itemDeleted}

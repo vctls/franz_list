@@ -10,7 +10,6 @@ const Item = (props: {
   id: number;
   order: number;
   name: string;
-  category: string;
   onDelete(id: number): void;
   onEdit(id: number): void;
 }) => {
