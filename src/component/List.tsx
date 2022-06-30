@@ -129,13 +129,8 @@ const List = () => {
   const itemDeleted = (id: number) => {
     setItemsState((prevItems) => {
       let newItems = [...prevItems];
-      const index = newItems.findIndex((item) => item.key === id);
       const item = newItems.find((item) => item.key === id);
       item.deleted = true;
-      // TODO Only mark item for deletion. Do not remove it from the array,
-      //  so it can be manipulated further, or re-added to the list.
-      //newItems.splice(index, 1);
-      console.log(index);
       return newItems;
     });
   };
@@ -145,9 +140,6 @@ const List = () => {
     setItemsState((prevItems) => {
       let newItems = [...prevItems];
       editItem = newItems.find((item) => item.key === id);
-      // TODO Only mark item for deletion. Do not remove it from the array,
-      //  so it can be manipulated further, or re-added to the list.
-      //newItems.splice(index, 1);
       setNameState(editItem.name);
       setOrderState(editItem.order);
       filter(editItem.name);

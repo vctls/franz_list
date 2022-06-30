@@ -51,6 +51,17 @@ const Item = (props: {
 
   const tabIndex = deleted || editing ? -1 : 0;
 
+  function deleteHandler() {
+    setDeleted(true);
+    props.onDelete(props.id);
+  }
+
+  function editHandler() {
+    setEditing(true);
+    props.onEdit(props.id);
+    props.onDelete(props.id);
+  }
+
   return (
     <li id={"item_" + props.id} className={className}>
       <div
@@ -70,7 +81,7 @@ const Item = (props: {
         style={{ touchAction: "pan-y" }}
       >
         {
-          // TODO Change order behaviour before displaying the field again.
+          // TODO Change order behaviour before displaying the order field again.
         }
         <span className="field order" style={{ display: "none" }}>
           {props.order}
@@ -79,9 +90,15 @@ const Item = (props: {
       </div>
       <div className="visual edit">
         <span className="icon memo">📝</span>
+        <div className="button-edit" role="button" onClick={editHandler}></div>
       </div>
       <div className="visual trash">
         <span className="icon cross">❌</span>
+        <div
+          className="button-delete"
+          role="button"
+          onClick={deleteHandler}
+        ></div>
       </div>
     </li>
   );

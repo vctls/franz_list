@@ -156,10 +156,6 @@ class GestureHandler {
       props: {
         onChange: (id: number, arg1: boolean) => void;
         id: number;
-        order: number;
-        name: string;
-        onDelete(id: number): void;
-        onEdit(id: number): void;
       }
     ) =>
     (e: { event: HandledEvents }) => {

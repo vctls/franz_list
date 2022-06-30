@@ -76,7 +76,6 @@ trailing transition cleaner.
     position: absolute;
     z-index: 1;
     top: 0;
-    pointer-events: none;
     transition: width .3s ease-in-out;
 }
 
@@ -110,18 +109,48 @@ trailing transition cleaner.
 
 .icon {
     display: inline-block;
+    height: inherit;
+    position: absolute;
+    top: 0;
 }
 
 .cross {
-    vertical-align: middle;
+    right: 0;
     padding-right: 5px;
 }
 
 .memo {
-    vertical-align: middle;
+    left: 0;
     padding-left: 5px;
 }
 
 .filtered {
     display: none;
+}
+
+/* Action buttons for wide screens */
+.button-edit, .button-delete {
+    display: none;
+}
+
+@media (min-width: 680px) {
+    .item-content {
+        margin: 0 30px;
+        padding: 0 5px;
+    }
+    
+    .button-edit, .button-delete {
+        display: block;
+        position: absolute;
+        height: inherit;
+        width: 30px;
+    }
+    
+    .button-edit {
+        left: 0;
+    }
+    
+    .button-delete {
+        right: 0;
+    }
 }
