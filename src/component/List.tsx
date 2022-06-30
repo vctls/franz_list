@@ -38,12 +38,22 @@ const List = () => {
 
   const submitHandler = (e: FormEvent): void => {
     e.preventDefault();
-    // Prevent exact duplicates
+    
+    // Prevent adding item with empty name.
+    if (nameState === "") {
+      return;
+    }
+    
+    // Prevent exact duplicates.
     const found = itemsState.find(
       (item) => item.name === nameState && item.deleted === false
     );
     if (!found) {
       addItem(nameState, orderState);
+      // Clear the form after successful add.
+      clearHandler();
+      // Immediately re-focus name field to keep adding elements.
+      document.getElementById("name")?.focus();
     }
   };
 

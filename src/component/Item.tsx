@@ -69,7 +69,12 @@ const Item = (props: {
         {...swipeHandler}
         style={{ touchAction: "pan-y" }}
       >
-        <span className="field order">{props.order}</span>
+        {
+          // TODO Change order behaviour before displaying the field again.
+        }
+        <span className="field order" style={{ display: "none" }}>
+          {props.order}
+        </span>
         <span className="field name">{props.name}</span>
       </div>
       <div className="visual edit">

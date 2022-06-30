@@ -21,7 +21,10 @@ const ItemForm = (props: {
           onChange={props.nameChangeHandler}
         />
       </label>
-      <label htmlFor="order">
+      {
+        // TODO Change order behaviour before displaying the field again.
+      }
+      <label htmlFor="order" style={{ display: "none" }}>
         Order&nbsp;
         <input
           id="order"
