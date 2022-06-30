@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/franz_list/static/css/main.8f0d902d.css",
-    "main.js": "/franz_list/static/js/main.6385b7d7.js",
+    "main.css": "/franz_list/static/css/main.56dc7600.css",
+    "main.js": "/franz_list/static/js/main.66e8a9d2.js",
     "static/js/787.14ded7f3.chunk.js": "/franz_list/static/js/787.14ded7f3.chunk.js",
     "static/media/water-brush-all-400-normal.woff": "/franz_list/static/media/water-brush-all-400-normal.37aa9e07207ac3308275.woff",
     "static/media/water-brush-latin-400-normal.woff2": "/franz_list/static/media/water-brush-latin-400-normal.a060af7e2c0d8f2671a9.woff2",
     "static/media/water-brush-latin-ext-400-normal.woff2": "/franz_list/static/media/water-brush-latin-ext-400-normal.a9c7ca81a73cf7ce680e.woff2",
     "static/media/water-brush-vietnamese-400-normal.woff2": "/franz_list/static/media/water-brush-vietnamese-400-normal.04a4b576db0e8d8b93f1.woff2",
     "index.html": "/franz_list/index.html",
-    "main.8f0d902d.css.map": "/franz_list/static/css/main.8f0d902d.css.map",
-    "main.6385b7d7.js.map": "/franz_list/static/js/main.6385b7d7.js.map",
+    "main.56dc7600.css.map": "/franz_list/static/css/main.56dc7600.css.map",
+    "main.66e8a9d2.js.map": "/franz_list/static/js/main.66e8a9d2.js.map",
     "787.14ded7f3.chunk.js.map": "/franz_list/static/js/787.14ded7f3.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.8f0d902d.css",
-    "static/js/main.6385b7d7.js"
+    "static/css/main.56dc7600.css",
+    "static/js/main.66e8a9d2.js"
   ]
 }
