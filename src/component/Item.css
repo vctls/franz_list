@@ -121,3 +121,7 @@ trailing transition cleaner.
     vertical-align: middle;
     padding-left: 5px;
 }
+
+.filtered {
+    display: none;
+}

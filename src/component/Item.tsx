@@ -10,6 +10,7 @@ const Item = (props: {
   id: number;
   order: number;
   name: string;
+  filtered: boolean;
   onDelete(id: number): void;
   onEdit(id: number): void;
 }) => {
@@ -35,8 +36,8 @@ const Item = (props: {
     "item" +
     (done ? " done" : "") +
     (deleted ? " deleted" : "") +
-    (editing ? " editing" : "");
-
+    (editing ? " editing" : "") +
+    (props.filtered ? " filtered" : "");
   const onDivMouseOverCapture = (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.stopPropagation();

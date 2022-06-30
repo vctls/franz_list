@@ -42,7 +42,7 @@ const List = () => {
   const [itemsState, setItemsState] = useState(getInitialArray());
 
   // Delegated form state
-  const [nameState, setNameState] = useState("");
+  let [nameState, setNameState] = useState("");
   const [orderState, setOrderState] = useState(0);
 
   const submitHandler = (e: FormEvent): void => {
@@ -65,9 +65,34 @@ const List = () => {
       document.getElementById("name")?.focus();
     }
   };
+  
+  /**
+   * Using setName does not trigger change
+   * @param value
+   */
+  function filter(value: string) {
+    setItemsState((prevItems) => {
+      const newItems = [...prevItems];
+      newItems.forEach(
+        (item) =>
+          (item.filtered = !item.name
+            .toLowerCase()
+            .includes(value.toLowerCase()))
+      );
+      return newItems;
+    });
+  }
 
   const nameChangeHandler = (e: React.FormEvent<HTMLInputElement>): void => {
-    setNameState(e.currentTarget.value);
+    const value = e.currentTarget.value;
+    setNameState(value);
+    filter(value);
+  };
+
+  const clearHandler = () => {
+    setNameState("");
+    setOrderState(0);
+    filter("");
   };
 
   const orderChangeHandler = (e: React.FormEvent<HTMLInputElement>): void => {
@@ -125,19 +150,10 @@ const List = () => {
       //newItems.splice(index, 1);
       setNameState(editItem.name);
       setOrderState(editItem.order);
+      filter(editItem.name);
       return newItems;
     });
     document.getElementById("name")?.focus();
-  };
-
-  // Filter items that contain the string in the name field.
-  const filteredItems = itemsState.filter((item) =>
-    item.name.includes(nameState)
-  );
-
-  const clearHandler = () => {
-    setNameState("");
-    setOrderState(0);
   };
 
   return (
@@ -151,13 +167,14 @@ const List = () => {
         clearHandler={clearHandler}
       ></ItemForm>
       <ol id="list">
-        {filteredItems.map((item) => {
+        {itemsState.map((item) => {
           return (
             <Item
               key={item.key}
               id={item.key}
               name={item.name}
               order={item.order}
+              filtered={item.filtered}
               onChange={itemChanged}
               onDelete={itemDeleted}
               onEdit={itemEdit}
