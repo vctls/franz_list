@@ -38,7 +38,7 @@ const Item = (props: {
     (deleted ? " deleted" : "") +
     (editing ? " editing" : "") +
     (props.filtered ? " filtered" : "");
-  const onDivMouseOverCapture = (event: React.MouseEvent<HTMLDivElement>) => {
+  const mouseOverHandler = (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.stopPropagation();
     const target = event.currentTarget;
@@ -62,13 +62,21 @@ const Item = (props: {
     props.onDelete(props.id);
   }
 
+  const mouseOutHandler = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const target = event.currentTarget;
+    target.blur();
+  }
+
   return (
     <li id={"item_" + props.id} className={className}>
       <div
         tabIndex={tabIndex}
         id={"item-content_" + props.id}
         role="button"
-        onMouseOverCapture={onDivMouseOverCapture}
+        onMouseOverCapture={mouseOverHandler}
+        onMouseOutCapture={mouseOutHandler}
         onKeyUp={gestureHandler.keyUp(
           setDone,
           setDeleted,

@@ -139,6 +139,7 @@ class GestureHandler {
         case "ArrowRight":
           setEditing(true);
           props.onEdit(props.id);
+          props.onDelete(props.id);
           break;
       }
     };

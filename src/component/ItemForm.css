@@ -11,3 +11,15 @@ label {
 form :not(input:last-child) {
     margin-right: 5px;
 }
+
+input {
+    font-size: large;
+    padding: 5px;
+    border: thin solid lightgrey;
+    border-radius: 3px;
+    transition: border 0.1s;
+}
+
+input:hover {
+    border: thin solid black;
+}

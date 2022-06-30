@@ -7,6 +7,7 @@
 
 .item-content:focus {
     background: lightgray;
+    outline: none;
 }
 
 /*
@@ -24,7 +25,7 @@ untouched.
     height: inherit;
     position: relative;
     right: 0;
-    transition: right .3s ease-in-out;
+    transition: right .3s ease-in-out, background-color 0.1s;
 }
 
 .item.deleted .item-content {
@@ -79,6 +80,11 @@ trailing transition cleaner.
     transition: width .3s ease-in-out;
 }
 
+.visual:hover {
+    transition: filter 0.1s;
+    filter: contrast(175%);
+}
+
 .trash {
     background-color: orangered;
     right: 0;
@@ -108,10 +114,8 @@ trailing transition cleaner.
 }
 
 .icon {
-    display: inline-block;
     height: inherit;
-    position: absolute;
-    top: 0;
+    vertical-align: middle;
 }
 
 .cross {
@@ -144,6 +148,7 @@ trailing transition cleaner.
         position: absolute;
         height: inherit;
         width: 30px;
+        top: 0;
     }
     
     .button-edit {
