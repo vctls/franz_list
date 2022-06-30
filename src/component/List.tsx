@@ -12,14 +12,18 @@ function arraymove(arr: any[], fromIndex: number, toIndex: number) {
 
 const getInitialArray = () => {
   const itemArray: any[] = [];
-  let key: number, name: string, category: string, order: number;
+  let key: number,
+    deleted = false,
+    name: string,
+    category: string,
+    order: number;
 
   for (let i: number = 0; i < 10; i++) {
     key = i;
     order = i;
     name = (Math.random() + 1).toString(36).substring(7);
     category = (Math.random() + 1).toString(36).substring(7);
-    itemArray.push({ key, name, category, order });
+    itemArray.push({ key, name, category, order, deleted });
   }
 
   return itemArray;
@@ -27,7 +31,7 @@ const getInitialArray = () => {
 
 const List = () => {
   const [itemsState, setItemsState] = useState(getInitialArray());
-  
+
   // Delegated form state
   const [nameState, setNameState] = useState("");
   const [orderState, setOrderState] = useState(0);
@@ -35,7 +39,10 @@ const List = () => {
   const submitHandler = (e: FormEvent): void => {
     e.preventDefault();
     // Prevent exact duplicates
-    if (!itemsState.find((item) => item.name === nameState)) {
+    const found = itemsState.find(
+      (item) => item.name === nameState && item.deleted === false
+    );
+    if (!found) {
       addItem(nameState, orderState);
     }
   };
@@ -43,7 +50,7 @@ const List = () => {
   const nameChangeHandler = (e: React.FormEvent<HTMLInputElement>): void => {
     setNameState(e.currentTarget.value);
   };
-  
+
   const orderChangeHandler = (e: React.FormEvent<HTMLInputElement>): void => {
     setOrderState(parseInt(e.currentTarget.value));
   };
@@ -51,11 +58,13 @@ const List = () => {
   const addItem = (name: string, order: number): void => {
     setItemsState((prevItems) => {
       const newItems = [...prevItems];
+      // TODO Items should probably have a prototype.
       newItems.unshift({
         key: newItems.length,
         name: name,
         category: "TODO",
         order: order,
+        deleted: false
       });
       return newItems;
     });
@@ -77,7 +86,9 @@ const List = () => {
   const itemDeleted = (id: number) => {
     setItemsState((prevItems) => {
       let newItems = [...prevItems];
-      let index = newItems.findIndex((item) => item.key === id);
+      const index = newItems.findIndex((item) => item.key === id);
+      const item = newItems.find((item) => item.key === id);
+      item.deleted = true;
       // TODO Only mark item for deletion. Do not remove it from the array,
       //  so it can be manipulated further, or re-added to the list.
       //newItems.splice(index, 1);
@@ -100,9 +111,11 @@ const List = () => {
     });
     document.getElementById("name")?.focus();
   };
-  
+
   // Filter items that contain the string in the name field.
-  const filteredItems = itemsState.filter((item) => item.name.includes(nameState))
+  const filteredItems = itemsState.filter((item) =>
+    item.name.includes(nameState)
+  );
 
   const clearHandler = () => {
     setNameState("");

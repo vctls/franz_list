@@ -100,11 +100,11 @@ class GestureHandler {
    * @param offset
    */
   private static focus(e: React.KeyboardEvent<HTMLDivElement>, offset: number) {
-    const lis = document.querySelectorAll("#list .item-content[tabindex='0']");
-    const index = Array.prototype.indexOf.call(lis, e.currentTarget);
-    console.log(lis);
+    const list = document.querySelectorAll("#list .item-content[tabindex='0']");
+    const index = Array.prototype.indexOf.call(list, e.currentTarget);
+    console.log(list);
     console.log(index);
-    const toFocus = lis[index + offset];
+    const toFocus = list[index + offset];
     if (toFocus instanceof HTMLElement) {
       toFocus.focus();
     }
