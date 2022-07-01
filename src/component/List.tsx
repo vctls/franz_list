@@ -65,7 +65,7 @@ const List = () => {
       document.getElementById("name")?.focus();
     }
   };
-  
+
   /**
    * Using setName does not trigger change
    * @param value
@@ -103,12 +103,13 @@ const List = () => {
     setItemsState((prevItems) => {
       const newItems = [...prevItems];
       // TODO Items should probably have a prototype.
-      newItems.unshift({
+      const newItem = {
         key: newItems.length,
         name: name,
         order: order,
         deleted: false,
-      });
+      };
+      newItems.unshift(newItem);
       return newItems;
     });
   };
@@ -126,11 +127,35 @@ const List = () => {
     });
   };
 
+  // Remove an item completely.
+  const removeItem = (id: number) => {
+    setItemsState((prevItems) => {
+      console.log(`Removing item ${id}.`);
+      let newItems = [...prevItems];
+      const index = newItems.findIndex((item) => item.key === id);
+      if (index < 0) {
+        console.log(`Item ${id} to be removed was not found.`);
+        return prevItems;
+      }
+      if (!newItems[index].deleted) {
+        console.log(`Item ${id} to be removed is not set for deletion.`);
+        return prevItems;
+      }
+      newItems.splice(index, 1);
+      return newItems;
+    });
+  };
+
   const itemDeleted = (id: number) => {
     setItemsState((prevItems) => {
+      console.log(`Item ${id} set for deletion.`);
       let newItems = [...prevItems];
       const item = newItems.find((item) => item.key === id);
       item.deleted = true;
+      // Completely remove the item after a small delay.
+      setTimeout(() => {
+        removeItem(id);
+      }, 3000);
       return newItems;
     });
   };
