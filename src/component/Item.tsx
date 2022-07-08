@@ -11,10 +11,11 @@ const Item = (props: {
   order: number;
   name: string;
   filtered: boolean;
+  done: boolean;
   onDelete(id: number): void;
   onEdit(id: number): void;
 }) => {
-  const [done, setDone] = useState(false);
+  const [done, setDone] = useState(props.done);
   const [deleted, setDeleted] = useState(false);
   const [editing, setEditing] = useState(false);
 

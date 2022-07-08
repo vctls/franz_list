@@ -10,36 +10,13 @@ function arraymove(arr: any[], fromIndex: number, toIndex: number) {
   arr.splice(toIndex, 0, element);
 }
 
-const getInitialArray = () => {
-  const itemArray: any[] = [];
-  let key: number,
-    deleted = false,
-    name: string,
-    order: number;
-
-  for (let i: number = 0; i < 10; i++) {
-    key = i;
-    order = i;
-    name = [
-      "Don Sanche",
-      "Christus",
-      "Te Deum",
-      "An die Künstler",
-      "La terre",
-      "Les aquilons",
-      "Les flots",
-      "Les astres",
-      "Nicht gezagt",
-      "Saatengrün",
-    ][i];
-    itemArray.push({ key, name, order, deleted });
-  }
-
-  return itemArray;
-};
-
-const List = () => {
-  const [itemsState, setItemsState] = useState(getInitialArray());
+const List = (props: {
+  initialItems: any[];
+  itemCreate: (id: number, order: number, name: string, done: boolean) => void;
+  itemUpdate: (id: number, order: number, name: string, done: boolean) => void;
+  itemDelete: (id: number) => void;
+}) => {
+  const [itemsState, setItemsState] = useState(props.initialItems);
 
   // Delegated form state
   let [nameState, setNameState] = useState("");
@@ -103,26 +80,35 @@ const List = () => {
     setItemsState((prevItems) => {
       const newItems = [...prevItems];
       // TODO Items should probably have a prototype.
+      const id = newItems.length
+        ? Math.max.apply(
+            null,
+            newItems.map((item) => item.id)
+          ) + 1
+        : 0;
       const newItem = {
-        key: newItems.length,
+        id: id,
         name: name,
         order: order,
         deleted: false,
       };
       newItems.unshift(newItem);
+      props.itemCreate(id, order, name, false);
       return newItems;
     });
   };
 
   const itemChanged = (id: number, done: boolean): void => {
     setItemsState((prevItems) => {
-      let newItems = [...prevItems];
-      let index = newItems.findIndex((item) => item.key === id);
+      const newItems = [...prevItems];
+      const index = newItems.findIndex((item) => item.id === id);
+      const item = newItems.find((item) => item.id === id);
       if (done) {
         arraymove(newItems, index, newItems.length);
       } else {
         arraymove(newItems, index, 0);
       }
+      props.itemUpdate(item.id, item.order, item.name, done);
       return newItems;
     });
   };
@@ -132,7 +118,7 @@ const List = () => {
     setItemsState((prevItems) => {
       console.log(`Removing item ${id}.`);
       let newItems = [...prevItems];
-      const index = newItems.findIndex((item) => item.key === id);
+      const index = newItems.findIndex((item) => item.id === id);
       if (index < 0) {
         console.log(`Item ${id} to be removed was not found.`);
         return prevItems;
@@ -150,9 +136,11 @@ const List = () => {
     setItemsState((prevItems) => {
       console.log(`Item ${id} set for deletion.`);
       let newItems = [...prevItems];
-      const item = newItems.find((item) => item.key === id);
+      const item = newItems.find((item) => item.id === id);
       item.deleted = true;
-      // Completely remove the item after a small delay.
+      props.itemDelete(id);
+      // Completely remove the item after a small delay,
+      // in order to allow more DOM manipulations, animations, etc.
       setTimeout(() => {
         removeItem(id);
       }, 3000);
@@ -164,7 +152,7 @@ const List = () => {
     let editItem;
     setItemsState((prevItems) => {
       let newItems = [...prevItems];
-      editItem = newItems.find((item) => item.key === id);
+      editItem = newItems.find((item) => item.id === id);
       setNameState(editItem.name);
       setOrderState(editItem.order);
       filter(editItem.name);
@@ -187,11 +175,12 @@ const List = () => {
         {itemsState.map((item) => {
           return (
             <Item
-              key={item.key}
-              id={item.key}
+              key={item.id}
+              id={item.id}
               name={item.name}
               order={item.order}
               filtered={item.filtered}
+              done={item.done}
               onChange={itemChanged}
               onDelete={itemDeleted}
               onEdit={itemEdit}
